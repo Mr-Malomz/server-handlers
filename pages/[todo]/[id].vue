@@ -1,6 +1,29 @@
 <script setup lang="ts">
 import { X } from 'lucide-vue-next';
+import type { TodoRecord } from '~/lib/xata';
+
 const route = useRoute();
+const todo = ref<TodoRecord>();
+const errorMsg = ref<string>("");
+
+const fetchData = async () => {
+    try {
+        const response = await $fetch<ApiResponse<TodoRecord>>(`/api/${route.params.id}`, {
+            method: "GET",
+        });
+        if (response.status === 200) {
+            todo.value = response.data;
+        } else {
+            errorMsg.value = response.error!.message;
+        }
+    } catch (error) {
+        errorMsg.value = "Error fetching data";
+    }
+};
+
+onMounted(() => {
+    fetchData();
+});
 
 
 </script>
@@ -17,7 +40,7 @@ const route = useRoute();
                         <NuxtLink to="/" class="flex justify-end mb-2">
                             <X class="cursor-pointer" />
                         </NuxtLink>
-                        <edit-todo-form />
+                        <edit-todo-form :todo="todo!" />
                     </div>
                 </div>
             </div>

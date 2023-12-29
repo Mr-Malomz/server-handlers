@@ -8,4 +8,12 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+
+  //add below
+  runtimeConfig: {
+    public: {
+      xataApiKey: "",
+      xataDatabaseUrl: "",
+    },
+  },
 })
